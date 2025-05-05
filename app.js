@@ -36,8 +36,6 @@ app.get('/', (req, res) => {
 const usersRoute = require('./routes/users');
 app.use('/users', usersRoute);
 
-const careerRoute = require('./routes/career');
-app.use('/career', careerRoute);
 
 const contactRoute = require('./routes/contact');
 app.use('/contact', contactRoute);
@@ -64,20 +62,7 @@ app.use('/posts', postsRoute);
 const pagesRoute = require('./routes/pages')
 app.use('/pages', pagesRoute);
 
-const imagesRoute = require('./routes/images');
-app.use('/images', imagesRoute);
 
-// const ordersRoute = require('./routes/orders');
-// app.use('/orders', ordersRoute);
-
-const mbdesignsRoute = require('./routes/mbdesigns');
-app.use('/mbdesigns',mbdesignsRoute);
-
-const portfolioRoute = require('./routes/portfolio')
-app.use('/portfolio',portfolioRoute);
-
-const testimonialRoute=require('./routes/testimonials');
-app.use('/testimonials',testimonialRoute);
 
 // View Engine Setup 
 app.set("views", path.join(__dirname, "views"))
