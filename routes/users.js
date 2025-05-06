@@ -45,6 +45,59 @@ router.get('/allusers', verifyJwtAdmin, async (req, res) => {
     }
 });
 
+// http://localhost:4000/users/badges
+router.get('/badges', verifyJwtAdmin, async (req, res) => {
+    try {
+        const response = await db.promise().query(`select * from pointsrewards_badges`);
+        res.status(201).json(response[0]);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+});
+
+// http://localhost:4000/users/points
+router.get('/points', verifyJwtAdmin, async (req, res) => {
+    try {
+        const response = await db.promise().query(`select * from pointsrewards_blogpoints`);
+        res.status(201).json(response[0]);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+});
+
+// http://localhost:4000/users/allusers
+router.get('/userdetails/:id', verifyJwtAdmin, async (req, res) => {
+    id = req.params.id;
+    try {
+        const response = await db.promise().query(`select * from pointsrewards_users where status = 1 AND username= ?`, [id]);
+        res.status(201).json(response[0][0]);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+});
+
+// http://localhost:4000/users/allusers
+router.get('/findbadge/:points', verifyJwtAdmin, async (req, res) => {
+    points = req.params.points;
+    try {
+        const response = await db.promise().query(`select * from pointsrewards_badges WHERE points < ?`, [points]);
+        console.log('findbadge response', response[0][0])
+        if(response[0][0]) {
+            res.status(201).json(response[0][0]);
+        }
+        else{
+            res.status(201).json({});
+        }
+        
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+});
+
 // http://localhost:4000/users/login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;

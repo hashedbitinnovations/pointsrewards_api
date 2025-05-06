@@ -49,16 +49,33 @@ router.get('/fetchblogbyid/:srno', async (req, res) => {
 
 //http://localhost:4000/posts/addNewData
 router.post('/addNewData', verifyJwt, async (req, res) => {
-    const { postheading, author, content, featuredimage, featuredicon, category } = req.body;
+    const { username, postheading, author, content, featuredimage, featuredicon, category } = req.body;
     //fetch last srno and then create postid
     let posttitle = postheading.toLowerCase().split(' ').join('-');
     let postid = posttitle.substring(0, 10);
+
+    const postlength = content.length;
+    console.log('postlength', postlength);
+
+    let blogpoints;
     try {
         if (!postheading || !content || !category) {
             return res.status(400).json({ message: "Bad Request: Missing required parameters" });
         } else {
             await db.promise().query('INSERT INTO posts (postid,posttitle,postheading, author, content ,featuredimage,featuredicon,category ) VALUES(?,?,?,?,?,?,?,?)',
                 [postid, posttitle, postheading, author, content, featuredimage, featuredicon, category]);
+
+                blogpoints = await db.promise().query(`SELECT * FROM pointsrewards_blogpoints WHERE min < ${postlength} AND max > ${postlength}`);
+                console.log('blogpoints', blogpoints[0][0].rewardpoints)
+
+                let oldpoints = await db.promise().query(`SELECT * FROM pointsrewards_users WHERE username = ?`, [username]);
+                console.log('oldpoints', oldpoints[0][0].rewardpointsearned)
+
+                newpoints = oldpoints[0][0].rewardpointsearned + blogpoints[0][0].rewardpoints;
+                console.log('newpoints', newpoints)
+
+                await db.promise().query(`UPDATE pointsrewards_users SET rewardpointsearned = ${newpoints}  WHERE username = ?`, [username]);
+
             return res.status(201).json({ message: "Data inserted successfully" });
         }
     } catch (err) {
