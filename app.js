@@ -36,10 +36,6 @@ app.get('/', (req, res) => {
 const usersRoute = require('./routes/users');
 app.use('/users', usersRoute);
 
-
-const contactRoute = require('./routes/contact');
-app.use('/contact', contactRoute);
-
 const blogRoute = require('./routes/blog');
 app.use('/blog', blogRoute);
 
@@ -53,25 +49,8 @@ app.use('/category', categoryRoute);
 const postcontentRoute = require('./routes/postcontent')
 app.use('/postcontent', postcontentRoute);
 
-const pagecontentRoute = require('./routes/pagecontent')
-app.use('/pagecontent', pagecontentRoute);
-
 const postsRoute = require('./routes/posts')
 app.use('/posts', postsRoute);
-
-const pagesRoute = require('./routes/pages')
-app.use('/pages', pagesRoute);
-
-
-
-// View Engine Setup 
-app.set("views", path.join(__dirname, "views"))
-app.set("view engine", "ejs")
-
-app.get("/file", function (req, res) {
-    res.render("Files");
-})
-
 
 app.listen(process.env.PORT || 4000, function () {
     console.log('App running on port 4000.');
